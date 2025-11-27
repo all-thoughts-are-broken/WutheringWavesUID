@@ -119,6 +119,7 @@ class DamageAttribute:
         crit_dmg=0,
         character_level=0,
         defense_reduction=0,
+        defense_ignorance=0,
         enemy_resistance=0.1,
         dmg_bonus_phantom: Optional[DamageBonusPhantom] = None,
         ph_detail=None,
@@ -154,6 +155,7 @@ class DamageAttribute:
         :param crit_dmg: 暴击伤害倍率 (例如 2.0 表示 200%)
         :param character_level: 角色等级
         :param defense_reduction: 减防百分比
+        :param defense_ignorance: 无视防御百分比
         :param enemy_resistance: 敌人抗性百分比
         :param dmg_bonus_phantom: 伤害加成百分比 -> DamageBonusPhantom
         :param ph_detail: 声骸个数和名字 -> List[PhantomDetail]
@@ -210,6 +212,8 @@ class DamageAttribute:
         self.character_level = character_level
         # 减防百分比
         self.defense_reduction = defense_reduction
+        # 无视防御百分比
+        self.defense_ignorance = defense_ignorance
         # 敌人抗性百分比
         self.enemy_resistance = 0
         # 伤害加成百分比 -> DamageBonusPhantom
@@ -288,6 +292,7 @@ class DamageAttribute:
             f"  角色等级={self.character_level}, \n"
             f"  敌人等级={self.enemy_level}, \n"
             f"  减防百分比={self.defense_reduction}, \n"
+            f"  无视防御百分比={self.defense_ignorance}, \n"
             f"  减防乘区={self.defense_ratio}, \n"
             f"  敌人抗性百分比={self.enemy_resistance}, \n"
             f"  声骸的加成百分比={self.dmg_bonus_phantom}, \n"
@@ -517,6 +522,12 @@ class DamageAttribute:
         self.add_effect(title, msg)
         return self
 
+    def add_defense_ignorance(self, defense_ignorance: float, title="", msg=""):
+        """增加无视防御百分比"""
+        self.defense_ignorance += defense_ignorance
+        self.add_effect(title, msg)
+        return self
+    
     def add_enemy_resistance(self, enemy_resistance: float, title="", msg=""):
         """增加敌人抗性百分比"""
         self.enemy_resistance += enemy_resistance
@@ -664,11 +675,12 @@ class DamageAttribute:
         """
         # enemy_defense = 1512
         enemy_defense = self.enemy_level * 8 + 792
-        # 计算公式为 (800 + 8 * 等级) / (800 + 8 * 等级 + 敌人防御 * (1 - 减防))
+        # 计算公式为 (800 + 8 * 等级) / (800 + 8 * 等级 + 敌人防御 * (1 - 减防) * (1 - 无视防御))
         return (800 + 8 * self.character_level) / (
             800
             + 8 * self.character_level
             + enemy_defense * (1 - self.defense_reduction)
+            * (1 - self.defense_ignorance)
         )
 
     @property

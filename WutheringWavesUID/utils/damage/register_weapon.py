@@ -226,7 +226,7 @@ class Weapon_21010046(WeaponAbstract):
         dmg = f"{self.param(3)}*{self.param(4)}"
         title = self.get_title()
         msg = f"自身获得护盾时，重击伤害无视目标{dmg}防御"
-        attr.add_defense_reduction(calc_percent_expression(dmg), title, msg)
+        attr.add_defense_ignorance(calc_percent_expression(dmg), title, msg)
 
 
 class Weapon_21010053(WeaponAbstract):
@@ -1203,7 +1203,7 @@ class Weapon_21040046(WeaponAbstract):
         dmg = f"{self.param(3)}*{self.param(5)}"
         title = self.get_title()
         msg = f"自身获得护盾时，共鸣解放伤害无视目标{dmg}防御"
-        attr.add_defense_reduction(calc_percent_expression(dmg), title, msg)
+        attr.add_defense_ignorance(calc_percent_expression(dmg), title, msg)
 
         return True
 

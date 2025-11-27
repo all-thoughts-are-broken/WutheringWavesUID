@@ -59,7 +59,7 @@ def calc_chain(attr: DamageAttribute, role: RoleDetailData, isGroup: bool = Fals
         # 6命
         title = f"{role_name}-六链"
         msg = "忽视目标40%防御"
-        attr.add_defense_reduction(0.4, title, msg)
+        attr.add_defense_ignorance(0.4, title, msg)
 
 
 def calc_damage_0(
